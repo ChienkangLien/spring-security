@@ -26,3 +26,5 @@ security_thymeleaf/.settings/
 security_thymeleaf/src/test/java/org/tutorial/repository/RepositoryTest.java
 security_thymeleaf/src/test/java/org/tutorial/service/impl/DeptServiceImplTest.java
 security_thymeleaf/src/test/java/org/tutorial/service/impl/EmpServiceImplTest.java
+security_jwt_rsa_parent/.settings/
+security_jwt_rsa_parent/common/.settings/

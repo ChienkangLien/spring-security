@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserPO user = userRepository.findByUsername(username);
+		UserPO user = userRepository.findByUsername(username); // 密碼由DaoAuthenticationProvider處理
 		if (user == null) {
 			throw new UsernameNotFoundException("Can't find user: " + username);
 		}
