@@ -1,18 +1,27 @@
 package org.tutorial.config;
 
+import java.util.Arrays;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.tutorial.filter.JwtVerifyFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,23 +30,31 @@ public class SecurityConfig {
 
 	@Autowired
 	private DataSource dataSource;
-
+	@Autowired
+    private RsaKeyProperties prop;
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
 	// 登入登出行為配置，注銷後會將用戶重定向到登錄頁面是Spring Security的標準行為
 	// role與authority是不同的級別
 	// 默認開啟csrf(跨站請求偽造)防護
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests(authorizeRequests -> authorizeRequests.antMatchers("/css/login.css").permitAll() // 放行
-				.antMatchers("/**").hasAnyRole("USER", "ADMIN") // 宣告路徑及腳色、也可使用authority
+		http.csrf().disable() // 在 RESTFul 開發的時候， API 會暴露給不同的用戶，用戶可能也會使用不同的 IP 地址。因此，需要禁用 CSRF。
+				.authorizeRequests(authorizeRequests -> authorizeRequests
+				.antMatchers("/emps/**", "dept/**").hasAnyRole("USER", "ADMIN") // 宣告路徑及腳色、也可使用authority
 				.anyRequest().authenticated()) // 所有其他請求需要用戶進行身份驗證（即登錄）。如果用戶沒有登錄，他們將被重定向到登錄頁面
-				.formLogin((form) -> form.loginPage("/login").permitAll()) // 登入動作
-				.logout(logout -> logout.permitAll()) // 登出動作
-				.rememberMe() // 啟用Remember-Me功能
-				.tokenRepository(persistentTokenRepository()) // token存進資料庫
-				.key("my-remember-me-key") // 配置Remember-Me的加密密鑰(可選)
-				.tokenValiditySeconds(360); // 配置Remember-Me令牌的有效期時間（以秒為單位）
-		;
+        		// 增加自定義驗證認證過濾器
+        		.addFilter(new JwtVerifyFilter(authenticationManager(), prop))
+        		// 前後端分離是無狀態的，不用session了，直接禁用。
+        		.sessionManagement()
+        		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        	;
 		return http.build();
+	}
+	
+	public AuthenticationManager authenticationManager() {
+	    return new ProviderManager(Arrays.asList(authenticationProvider(userDetailsService, passwordEncoder())));
 	}
 
 	// 資料庫格式需符合spring security規範
@@ -63,4 +80,11 @@ public class SecurityConfig {
 //		return NoOpPasswordEncoder.getInstance(); // 明文密碼
 	}
 
+	public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+			PasswordEncoder passwordEncoder) {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(userDetailsService);
+		provider.setPasswordEncoder(passwordEncoder);
+		return provider;
+	}
 }

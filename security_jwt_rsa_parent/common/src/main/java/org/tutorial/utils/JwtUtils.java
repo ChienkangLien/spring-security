@@ -61,7 +61,7 @@ public class JwtUtils {
      * @return Jws<Claims>
      */
     private static Jws<Claims> parserToken(String token, PublicKey publicKey) {
-        return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
+        return Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token);
     }
 
     private static String createJTI() {

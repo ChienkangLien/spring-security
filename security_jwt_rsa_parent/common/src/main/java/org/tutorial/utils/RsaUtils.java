@@ -9,9 +9,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-/**
- * @author 黑馬程序員
- */
 public class RsaUtils {
 
     private static final int DEFAULT_KEY_SIZE = 2048;
@@ -101,4 +98,5 @@ public class RsaUtils {
         }
         Files.write(dest.toPath(), bytes);
     }
+    
 }

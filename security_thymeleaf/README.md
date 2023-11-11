@@ -1,12 +1,12 @@
 # security_thymeleaf
 
-config配置：filterChain行為、資料庫映射、驗證機制
+config配置：filterChain行為、資料庫映射
 
 註解：指定類/方法套用
 
 異常處理：捕捉spring security異常
 
-UserDetailsServiceImpl：資料庫映射實作
+UserDetailsServiceImpl：驗證機制
 
 thymeleaf：自製登入頁、命名空間(sec:)
 
