@@ -30,3 +30,4 @@ security_jwt_rsa_parent/.settings/
 security_jwt_rsa_parent/common/.settings/
 security_jwt_rsa_parent/auth_server/.settings/
 security_jwt_rsa_parent/resource/.settings/
+security_oauth/.settings/
