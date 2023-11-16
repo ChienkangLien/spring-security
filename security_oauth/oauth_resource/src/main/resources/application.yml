@@ -14,10 +14,6 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
   
-  # 允許bean定義是否可以被重寫
+  # 允許bean定義重寫
   main:
-    allow-bean-definition-overriding: true
-    
-rsa:
-  key:
-    publicKeyFile: D:\spring_security_practice\key\rsa_public.pub
+    allow-bean-definition-overriding: true  
