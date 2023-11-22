@@ -8,10 +8,10 @@
 	</parent>
 
 	<groupId>com.practice.www</groupId>
-	<artifactId>oauth_resource</artifactId>
+	<artifactId>oauth_server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>oauth_resource</name>
+	<name>oauth_server</name>
 	<!-- FIXME change it to the project's website -->
 	<url>http://www.example.com</url>
 
@@ -40,9 +40,9 @@
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -51,6 +51,15 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.messaging.saaj</groupId>
+			<artifactId>saaj-impl</artifactId>
 		</dependency>
 	</dependencies>
 
