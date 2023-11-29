@@ -26,13 +26,13 @@ import org.tutorial.utils.ConvertToVOUtil;
 
 @Controller
 @RequestMapping("/dept")
+@Secured("ROLE_DEPT")
 public class DeptController  {
 	@Autowired
 	private DeptService deptService;
 	@Autowired
 	EmpService empService;
 
-	@Secured("ROLE_DEPT")
 	// 加入VO概念，PO主要關注數據的存儲和持久化，而VO主要關注數據在業務邏輯層或展示層的傳遞和使用
 	@GetMapping("/listAll")
     public String listAll(Model model) {

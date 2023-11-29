@@ -29,6 +29,7 @@ import org.tutorial.utils.ConvertToVOUtil;
 
 @Controller
 @RequestMapping("/emp")
+@Secured("ROLE_EMP")
 public class EmpController {
 	@Autowired
 	private DeptService deptService;
@@ -39,7 +40,6 @@ public class EmpController {
 	int defaultSizeValue = 5;
 	String defaultSortFieldAndDirectionValue = "empno_ASC";
 
-	@Secured("ROLE_EMP")
 	// 加入VO概念，PO主要關注數據的存儲和持久化，而VO主要關注數據在業務邏輯層或展示層的傳遞和使用
 	@GetMapping("/listAll")
 	public String listAll(Model model, @RequestParam(defaultValue = "0") int page,

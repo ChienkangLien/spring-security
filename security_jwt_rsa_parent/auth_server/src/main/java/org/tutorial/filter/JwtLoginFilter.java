@@ -88,7 +88,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 			PrintWriter out = response.getWriter();
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("code", HttpServletResponse.SC_OK);
-			map.put("message", "登陸成功！");
+			map.put("message", "登入成功！");
 			out.write(new ObjectMapper().writeValueAsString(map));
 			out.flush();
 			out.close();
