@@ -2,7 +2,7 @@
 採maven module 方式建立專案，父工程<packaging>pom</packaging> 底下多個子工程
 
 ## common
-自訂工具類：公私鑰轉換；此範例採公鑰加密私鑰解密
+自訂工具類：公私鑰轉換；私鑰加密公鑰解密
 
 ## auth_server
 頒發token
