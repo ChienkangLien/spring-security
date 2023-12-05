@@ -14,10 +14,10 @@ body: {
 "username":"user2",
 "password":"user2"
 }
-response head 會帶 token，Authorization : Bearer ...
+response head 會帶 token，`Authorization : Bearer <token>`
 
 ## resource
 只提供資源服務，根據auth_server、去除認證的動作(JwtLoginFilter、私鑰)
 
 http://localhost:8082/ 發送資源請求
-requset header 要帶token，Authorization : Bearer ...
+requset header 要帶token，`Authorization : Bearer <token>`

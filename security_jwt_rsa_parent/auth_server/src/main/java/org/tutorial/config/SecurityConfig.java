@@ -2,7 +2,6 @@ package org.tutorial.config;
 
 import java.util.Arrays;
 
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +18,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.tutorial.filter.JwtLoginFilter;
 import org.tutorial.filter.JwtVerifyFilter;
 
@@ -29,8 +26,6 @@ import org.tutorial.filter.JwtVerifyFilter;
 @EnableGlobalMethodSecurity(securedEnabled = true) // 啟用@Secured管理，另jsr250Enabled管理@RolesAllowed、prePostEnabled管理@PostAuthorize、proxyTargetClass管理代理對象
 public class SecurityConfig {
 
-	@Autowired
-	private DataSource dataSource;
 	@Autowired
     private RsaKeyProperties prop;
 	@Autowired
@@ -58,15 +53,6 @@ public class SecurityConfig {
 	
 	public AuthenticationManager authenticationManager() {
 	    return new ProviderManager(Arrays.asList(authenticationProvider(userDetailsService, passwordEncoder())));
-	}
-
-	// 資料庫格式需符合spring security規範
-	public PersistentTokenRepository persistentTokenRepository() {
-		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
-		tokenRepository.setDataSource(dataSource);
-		// 啟動的時候自動創建表
-//      tokenRepository.setCreateTableOnStartup(true);
-		return tokenRepository;
 	}
 
 	// hardcode
