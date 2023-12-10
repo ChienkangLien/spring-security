@@ -37,10 +37,10 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	// 從資料庫中查詢出客戶端信息
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	// 從資料庫中查詢出客戶端資料
 	@Bean
 	public JdbcClientDetailsService clientDetailsService() {
 		JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
@@ -66,7 +66,7 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
 		return new JdbcAuthorizationCodeServices(dataSource);
 	}
 
-	// 指定客戶端登錄信息來源
+	// 指定客戶端登錄資料來源
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		// 從資料庫取數據
@@ -74,9 +74,9 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
 
 		// 從內存中取數據
 //        clients.inMemory()
-//                .withClient("baidu")
-//                .secret(passwordEncoder.encode("12345"))
-//                .resourceIds("product_api")
+//                .withClient("client_one")
+//                .secret(passwordEncoder.encode("password"))
+//                .resourceIds("emp_api")
 //                .authorizedGrantTypes(
 //                        "authorization_code",
 //                        "password",
@@ -87,16 +87,15 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
 //                .scopes("read", "write")// 允許的授權範圍
 //                .autoApprove(false)
 //                //加上驗證回調地址
-//                .redirectUris("http://www.baidu.com");
+//                .redirectUris("http://example");
 	}
 
 	// 檢測token的策略
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
 		oauthServer.allowFormAuthenticationForClients() // 允許form表單客戶端認證，允許客戶端使用client_id和client_secret獲取token
-				.checkTokenAccess("isAuthenticated()") // 通過驗證返回token信息
-				.tokenKeyAccess("permitAll()") // 獲取token請求不進行攔截
-				.passwordEncoder(passwordEncoder);
+				.checkTokenAccess("isAuthenticated()") // 檢驗token前提要經過認證
+				;
 	}
 
 	// OAuth2的主配置信息

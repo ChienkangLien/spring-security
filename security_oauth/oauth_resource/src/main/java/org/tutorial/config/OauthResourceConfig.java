@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 @EnableResourceServer
+@EnableGlobalMethodSecurity(securedEnabled = true) // 啟用@Secured管理，另jsr250Enabled管理@RolesAllowed、prePostEnabled管理@PostAuthorize、proxyTargetClass管理代理對象
 public class OauthResourceConfig extends ResourceServerConfigurerAdapter {
 
 	@Autowired
@@ -34,14 +36,14 @@ public class OauthResourceConfig extends ResourceServerConfigurerAdapter {
 	 */
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.resourceId("emp_api") // 指定當前資源的id
+		resources.resourceId("emp_api") // 指定當前資源的id；對應oauth_client_details的resource_ids
 			.tokenStore(jdbcTokenStore()); // 指定保存token的方式
 	}
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			// 指定不同請求方式訪問資源所需要的權限，一般查詢是read，其餘是write
+			// 指定不同請求方式訪問資源所需要的權限，一般查詢是read，其餘是write；對應oauth_client_details的scope
 			.antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('read')")
 			.antMatchers(HttpMethod.POST, "/**").access("#oauth2.hasScope('write')")
 			.antMatchers(HttpMethod.PATCH, "/**").access("#oauth2.hasScope('write')")

@@ -13,7 +13,3 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-  
-  # 允許bean定義重寫
-  main:
-    allow-bean-definition-overriding: true  
