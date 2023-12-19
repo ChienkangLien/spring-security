@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableResourceServer
@@ -21,15 +23,30 @@ public class OauthResourceConfig extends ResourceServerConfigurerAdapter {
 
 	@Autowired
 	private DataSource dataSource;
-
+	
 	/**
 	 * 指定token的持久化策略、其下有： RedisTokenStore保存到redis中， JdbcTokenStore保存到數據庫中，
 	 * InMemoryTokenStore保存到內存中， 此範例選擇保存在資料庫中
 	 */
+//	@Bean
+//	public TokenStore tokenStore() {
+//		return new JdbcTokenStore(dataSource);
+//	}
+	
+	/**
+	 * Jwt Token，這種方式就不需要存儲在資料庫，也與JdbcTokenStore相抵觸，擇一使用
+	 */
 	@Bean
-	public TokenStore jdbcTokenStore() {
-		return new JdbcTokenStore(dataSource);
-	}
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+	
+	@Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey("my_signing_key"); // 對稱式加密
+        return converter;
+    }
 
 	/**
 	 * 指定當前資源的id和存儲方案
@@ -37,7 +54,7 @@ public class OauthResourceConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.resourceId("emp_api") // 指定當前資源的id；對應oauth_client_details的resource_ids
-			.tokenStore(jdbcTokenStore()); // 指定保存token的方式
+			.tokenStore(tokenStore()); // 指定保存token的方式
 	}
 
 	@Override

@@ -1,10 +1,17 @@
 package org.tutorial.config;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +27,7 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @Configuration
 @EnableAuthorizationServer
@@ -48,11 +56,11 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
 		return jdbcClientDetailsService;
 	}
 
-	// token保存策略
-	@Bean
-	public TokenStore tokenStore() {
-		return new JdbcTokenStore(dataSource);
-	}
+	// token保存策略，若使用jwt則可省略
+//	@Bean
+//	public TokenStore tokenStore() {
+//		return new JdbcTokenStore(dataSource);
+//	}
 
 	// 授權信息保存策略
 	@Bean
@@ -97,15 +105,24 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
 				.checkTokenAccess("isAuthenticated()") // 檢驗token前提要經過認證
 				;
 	}
+	
+	// 採用jwt Token，若使用這個方式就不需要tokenStore()
+	@Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey("my_signing_key"); // 對稱式加密
+        return converter;
+    }
 
 	// OAuth2的主配置信息
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints
+			.accessTokenConverter(accessTokenConverter()) // 採用jwt Token
 			.approvalStore(approvalStore())
 			.authenticationManager(authenticationManager)
 			.authorizationCodeServices(authorizationCodeServices())
-			.tokenStore(tokenStore())
+//			.tokenStore(tokenStore()) // 若使用jwt則可省略
 			.userDetailsService(userDetailsService);
 	}
 }
