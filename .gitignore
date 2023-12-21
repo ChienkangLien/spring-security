@@ -34,3 +34,8 @@ security_oauth/.settings/
 security_oauth/oauth/.settings/
 security_oauth/oauth_resource/.settings/
 security_oauth/oauth_server/.settings/
+security_thirdPartyLogin/mvnw
+security_thirdPartyLogin/mvnw.cmd
+security_thirdPartyLogin/.mvn/
+security_thirdPartyLogin/HELP.md
+security_thirdPartyLogin/.settings/
