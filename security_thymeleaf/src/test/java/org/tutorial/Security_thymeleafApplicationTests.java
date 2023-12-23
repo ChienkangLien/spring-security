@@ -11,7 +11,7 @@ class Security_thymeleafApplicationTests {
 	void contextLoads() {
 		// 利用BCryptPasswordEncoder將明文加密
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		System.out.println(passwordEncoder.encode("user3"));
+		System.out.println(passwordEncoder.encode("password"));
 	}
 
 }

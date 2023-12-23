@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:if="${#request.getParameter('logout')} != null" th:text="'Re: Login'">Login</title>
+    <title th:if="${#request.getParameter('logout')} == null">Login</title>
+</head>
+<body>
+	<h1 th:if="${#request.getParameter('logout')} != null" th:text="'Re: Login'">Login</h1>
+    <h1 th:if="${#request.getParameter('logout')} == null">Login</h1>
+    <div>
+        <a href="/oauth2/authorization/github">Login with GitHub</a>
+    </div>
+    <div>
+        <a href="/oauth2/authorization/google">Login with Google</a>
+    </div>
+</body>
+</html>

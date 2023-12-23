@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Login Success</title>
+</head>
+<body>
+	<h1>Login Success</h1>
+	<hr>
+	<h2>userAttributes</h2>
+	<table>
+		<tr th:each="entry : ${userAttributes.entrySet()}">
+			<td th:text="${entry.key}"></td>
+			<td th:text="${entry.value}"></td>
+		</tr>
+	</table>
+	<hr>
+	<h2>userAuthorities</h2>
+	<table>
+		<tr th:each="authority : ${userAuthorities}">
+			<td th:text="${authority.authority}"></td>
+		</tr>
+	</table>
+	<div></div>
+
+	<form id="logoutForm" action="/logout" method="post">
+		<button type="submit">Logout</button>
+	</form>
+</body>
+</html>
