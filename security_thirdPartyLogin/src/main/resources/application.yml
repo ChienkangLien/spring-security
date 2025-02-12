@@ -9,3 +9,23 @@ spring:
           github:
             client-id: {client-id}
             client-secret: {client-secret}
+          azure:
+            client-id: {client-id}
+            client-secret: {client-secret}
+            scope: User.Read
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://yourdomain/login/oauth2/code/azure"
+            client-name: Microsoft
+            provider: azure
+        provider:
+          azure:
+            authorization-uri: https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
+            token-uri: https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
+            user-info-uri: https://graph.microsoft.com/v1.0/me
+            user-name-attribute: userPrincipalName
+            
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
